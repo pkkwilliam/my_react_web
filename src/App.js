@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import AppContext from "./context/appContext";
+import Display from "./Display";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  state = {
+    value: [],
+  };
+
+  render() {
+    fetch("http://127.0.0.1:8081/actuator/health", {
+      mode: "cors",
+    }).then((result) => console.log(result));
+
+    return (
+      <AppContext.Provider
+        value={{
+          value: this.state.value,
+          addValue: this.addValue,
+          removeValue: this.removeValue,
+        }}
+      >
+        <Display />
+      </AppContext.Provider>
+    );
+  }
+
+  addValue = (value) => {
+    console.log("addValue");
+    this.setState({
+      value: this.state.value.concat(value),
+    });
+  };
+
+  removeValue = (index) => {
+    console.log("remove value");
+  };
 }
-
-export default App;
